@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /** متجر كتب التطوير (ExcellentEnchants) - الأمر /enchantshop. الأسعار من enchant-books.yml. */
 public final class EnchantShop implements Listener, CommandExecutor {
@@ -36,8 +34,6 @@ public final class EnchantShop implements Listener, CommandExecutor {
     private static final int PER_PAGE = 45;
 
     private record Entry(String id, String name, String category, int level, double price, Enchantment ench) {}
-
-    private record Pending(String id, long expires) {}
 
     private static final class Holder implements InventoryHolder {
         final int page;
@@ -54,9 +50,29 @@ public final class EnchantShop implements Listener, CommandExecutor {
         }
     }
 
+    /** شاشة الشراء (زي EconomyShopGUI): اختيار الكمية ثم تأكيد. */
+    private static final class BuyHolder implements InventoryHolder {
+        final Entry entry;
+        final int backPage;
+        int amount = 1;
+        Inventory inv;
+
+        BuyHolder(Entry entry, int backPage) {
+            this.entry = entry;
+            this.backPage = backPage;
+        }
+
+        @Override
+        public Inventory getInventory() {
+            return inv;
+        }
+    }
+
+    private static final int S_CONFIRM = 13, S_REM32 = 19, S_REM16 = 20, S_REM1 = 21, S_SEL = 22,
+            S_ADD1 = 23, S_ADD16 = 24, S_ADD32 = 25, S_BACK = 36, S_HEAD = 40;
+
     private final CreateShopPlugin plugin;
     private final List<Entry> entries = new ArrayList<>();
-    private final Map<UUID, Pending> pendings = new HashMap<>();
 
     public EnchantShop(CreateShopPlugin plugin) {
         this.plugin = plugin;
@@ -146,13 +162,7 @@ public final class EnchantShop implements Listener, CommandExecutor {
     }
 
     private static ItemStack named(Material mat, String name) {
-        ItemStack it = new ItemStack(mat);
-        ItemMeta meta = it.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(name);
-            it.setItemMeta(meta);
-        }
-        return it;
+        return named(mat, name, 1);
     }
 
     private ItemStack book(Entry e) {
@@ -164,9 +174,100 @@ public final class EnchantShop implements Listener, CommandExecutor {
         return it;
     }
 
+    private int maxAmount() {
+        return Math.max(1, Math.min(64, plugin.getConfig().getInt("enchant-shop.max-amount", 64)));
+    }
+
+    private void openBuy(Player p, Entry e, int backPage) {
+        BuyHolder h = new BuyHolder(e, backPage);
+        Inventory inv = Bukkit.createInventory(h, 45, Messages.color(m().gui("gui.es-buy-title", "book", e.name() + " " + e.level())));
+        h.inv = inv;
+        render(p, h);
+        p.openInventory(inv);
+    }
+
+    private void render(Player p, BuyHolder h) {
+        Inventory inv = h.inv;
+        int max = maxAmount();
+        double total = plugin.round2(h.entry.price() * h.amount);
+
+        inv.setItem(S_REM32, named(Material.MAGENTA_STAINED_GLASS_PANE, m().gui("gui.es-minus", "n", 32), 32));
+        inv.setItem(S_REM16, named(Material.MAGENTA_STAINED_GLASS_PANE, m().gui("gui.es-minus", "n", 16), 16));
+        inv.setItem(S_REM1, named(Material.MAGENTA_STAINED_GLASS_PANE, m().gui("gui.es-minus", "n", 1), 1));
+        inv.setItem(S_ADD1, named(Material.LIGHT_BLUE_STAINED_GLASS_PANE, m().gui("gui.es-plus", "n", 1), 1));
+        inv.setItem(S_ADD16, named(Material.LIGHT_BLUE_STAINED_GLASS_PANE, m().gui("gui.es-plus", "n", 16), 16));
+        inv.setItem(S_ADD32, named(Material.LIGHT_BLUE_STAINED_GLASS_PANE, m().gui("gui.es-plus", "n", 32), 32));
+
+        ItemStack confirm = named(Material.PAPER, m().gui("gui.es-confirm-name"), 1);
+        ItemMeta cm = confirm.getItemMeta();
+        List<String> cl = new ArrayList<>();
+        cl.add(m().gui("gui.es-total", "price", plugin.money(total)));
+        cm.setLore(cl);
+        confirm.setItemMeta(cm);
+        inv.setItem(S_CONFIRM, confirm);
+
+        ItemStack sel = book(h.entry);
+        sel.setAmount(h.amount);
+        ItemMeta sm = sel.getItemMeta();
+        List<String> sl = sm.hasLore() && sm.getLore() != null ? new ArrayList<>(sm.getLore()) : new ArrayList<>();
+        sl.add(m().gui("gui.es-amount", "amount", h.amount));
+        if (h.amount >= max) sl.add(m().gui("gui.es-max"));
+        else if (h.amount <= 1) sl.add(m().gui("gui.es-min"));
+        sm.setLore(sl);
+        sel.setItemMeta(sm);
+        inv.setItem(S_SEL, sel);
+
+        inv.setItem(S_BACK, named(Material.ARROW, m().gui("gui.es-back"), 1));
+        Economy eco = plugin.economy();
+        ItemStack head = named(Material.PLAYER_HEAD, "&f" + p.getName(), 1);
+        ItemMeta hm = head.getItemMeta();
+        hm.setLore(List.of(m().gui("gui.es-balance", "balance", eco == null ? "?" : plugin.money(eco.getBalance(p)))));
+        head.setItemMeta(hm);
+        inv.setItem(S_HEAD, head);
+    }
+
+    private static ItemStack named(Material mat, String name, int amount) {
+        ItemStack it = new ItemStack(mat, amount);
+        ItemMeta meta = it.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(Messages.color(name));
+            it.setItemMeta(meta);
+        }
+        return it;
+    }
+
     @EventHandler
     public void onClick(InventoryClickEvent ev) {
         Inventory top = ev.getView().getTopInventory();
+        if (top.getHolder() instanceof BuyHolder bh) {
+            ev.setCancelled(true);
+            if (!(ev.getWhoClicked() instanceof Player p)) return;
+            if (ev.getClickedInventory() != top) return;
+            int slot = ev.getRawSlot();
+            int max = maxAmount();
+            switch (slot) {
+                case S_REM32 -> bh.amount = Math.max(1, bh.amount - 32);
+                case S_REM16 -> bh.amount = Math.max(1, bh.amount - 16);
+                case S_REM1 -> bh.amount = Math.max(1, bh.amount - 1);
+                case S_ADD1 -> bh.amount = Math.min(max, bh.amount + 1);
+                case S_ADD16 -> bh.amount = Math.min(max, bh.amount + 16);
+                case S_ADD32 -> bh.amount = Math.min(max, bh.amount + 32);
+                case S_BACK -> {
+                    Bukkit.getScheduler().runTask(plugin, () -> open(p, bh.backPage));
+                    return;
+                }
+                case S_CONFIRM -> {
+                    Bukkit.getScheduler().runTask(plugin, p::closeInventory);
+                    buy(p, bh.entry, bh.amount);
+                    return;
+                }
+                default -> {
+                    return;
+                }
+            }
+            render(p, bh);
+            return;
+        }
         if (!(top.getHolder() instanceof Holder h)) return;
         ev.setCancelled(true);
         if (!(ev.getWhoClicked() instanceof Player p)) return;
@@ -180,60 +281,42 @@ public final class EnchantShop implements Listener, CommandExecutor {
             Bukkit.getScheduler().runTask(plugin, () -> open(p, h.page + 1));
         } else {
             Entry e = h.slots.get(slot);
-            if (e != null) click(p, e);
+            if (e != null) Bukkit.getScheduler().runTask(plugin, () -> openBuy(p, e, h.page));
         }
     }
 
     @EventHandler
     public void onDrag(InventoryDragEvent ev) {
-        if (ev.getView().getTopInventory().getHolder() instanceof Holder) ev.setCancelled(true);
+        InventoryHolder ih = ev.getView().getTopInventory().getHolder();
+        if (ih instanceof Holder || ih instanceof BuyHolder) ev.setCancelled(true);
     }
 
-    @EventHandler
-    public void onQuit(PlayerQuitEvent ev) {
-        pendings.remove(ev.getPlayer().getUniqueId());
-    }
-
-    private void click(Player p, Entry e) {
-        long now = System.currentTimeMillis();
-        if (plugin.getConfig().getBoolean("confirm-purchase", true)) {
-            Pending pd = pendings.get(p.getUniqueId());
-            if (pd == null || pd.expires() < now || !pd.id().equals(e.id())) {
-                long ms = plugin.getConfig().getLong("confirm-timeout-seconds", 8) * 1000L;
-                pendings.put(p.getUniqueId(), new Pending(e.id(), now + ms));
-                p.sendMessage(m().msg("es-confirm", "book", e.name() + " " + e.level(), "price", plugin.money(e.price())));
-                return;
-            }
-            pendings.remove(p.getUniqueId());
-        }
-        buy(p, e);
-    }
-
-    private void buy(Player p, Entry e) {
+    private void buy(Player p, Entry e, int amount) {
         Economy eco = plugin.economy();
         if (eco == null) {
             p.sendMessage(m().msg("economy-missing"));
             return;
         }
-        double price = plugin.round2(e.price());
-        if (!plugin.canAfford(p, price)) {
-            p.sendMessage(m().msg("not-enough", "total", plugin.money(price)));
+        amount = Math.max(1, Math.min(maxAmount(), amount));
+        double total = plugin.round2(e.price() * amount);
+        if (!plugin.canAfford(p, total)) {
+            p.sendMessage(m().msg("not-enough", "total", plugin.money(total)));
             return;
         }
-        ItemStack give = book(e);
-        if (!ShopGui.canFit(p.getInventory(), give, 1)) {
+        ItemStack one = book(e);
+        if (!ShopGui.canFit(p.getInventory(), one, amount)) {
             p.sendMessage(m().msg("inv-full-buy"));
             return;
         }
-        EconomyResponse r = plugin.charge(p, price);
+        EconomyResponse r = plugin.charge(p, total);
         if (!r.transactionSuccess()) {
             p.sendMessage(m().msg("buy-failed", "reason", String.valueOf(r.errorMessage)));
             return;
         }
-        p.getInventory().addItem(give);
-        p.sendMessage(m().msg("es-bought", "book", e.name() + " " + e.level(), "price", plugin.money(price)));
+        for (int i = 0; i < amount; i++) p.getInventory().addItem(book(e));
+        p.sendMessage(m().msg("es-bought", "book", e.name() + " " + e.level(), "amount", amount, "price", plugin.money(total)));
         if (plugin.getConfig().getBoolean("log-sales", true)) {
-            plugin.getLogger().info(p.getName() + " bought book " + e.id() + ":" + e.level() + " for " + price);
+            plugin.getLogger().info(p.getName() + " bought " + amount + " x book " + e.id() + ":" + e.level() + " for " + total + " with the buy screen.");
         }
     }
 }

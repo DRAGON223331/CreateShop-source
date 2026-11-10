@@ -73,3 +73,5 @@ integrations:
 enchant-shop:
   # namespace التطويرات (ExcellentEnchants: Use-Minecraft-Namespace=false => excellentenchants)
   namespace: "excellentenchants"
+  # أقصى كمية للشراء في العملية الواحدة (شاشة الشراء زي EconomyShopGUI)
+  max-amount: 64
