@@ -23,6 +23,7 @@ public final class CreateShopPlugin extends JavaPlugin {
     private PriceService prices;
     private ShopManager shops;
     private ShopGui gui;
+    private EnchantShop enchantShop;
     private final Set<Material> blacklist = new HashSet<>();
 
     @Override
@@ -40,6 +41,12 @@ public final class CreateShopPlugin extends JavaPlugin {
 
         gui = new ShopGui(this);
         getServer().getPluginManager().registerEvents(gui, this);
+
+        enchantShop = new EnchantShop(this);
+        enchantShop.load();
+        getServer().getPluginManager().registerEvents(enchantShop, this);
+        PluginCommand ec = getCommand("enchantshop");
+        if (ec != null) ec.setExecutor(enchantShop);
 
         ShopCommand cmd = new ShopCommand(this);
         PluginCommand pc = getCommand("createshop");
@@ -59,6 +66,7 @@ public final class CreateShopPlugin extends JavaPlugin {
         messages.load();
         loadBlacklist();
         prices.reload();
+        enchantShop.load();
     }
 
     private void loadBlacklist() {

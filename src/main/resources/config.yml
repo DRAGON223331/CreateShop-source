@@ -65,3 +65,8 @@ integrations:
     enabled: true
     show-server-prices: true
     folder: "EconomyShopGUI"
+
+# متجر كتب التطوير (/enchantshop) - الأسعار في enchant-books.yml
+enchant-shop:
+  # namespace التطويرات (ExcellentEnchants: Use-Minecraft-Namespace=false => excellentenchants)
+  namespace: "excellentenchants"

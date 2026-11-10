@@ -1,0 +1,409 @@
+# متجر كتب التطوير (/enchantshop) - كتب ExcellentEnchants
+# id = اسم ملف التطوير في ExcellentEnchants/enchants (بدون .yml)
+# عدّل الأسعار والمستويات براحتك، وامسح أي كتاب مش عايزه. بعد التعديل: /createshop reload
+books:
+  cold_steel:
+    name: "Cold Steel"
+    category: "الدروع"
+    level: 3
+    price: 8810
+  darkness_cloak:
+    name: "Darkness Cloak"
+    category: "الدروع"
+    level: 3
+    price: 8810
+  dragon_heart:
+    name: "Dragon Heart"
+    category: "الدروع"
+    level: 5
+    price: 37940
+  elemental_protection:
+    name: "Elemental Protection"
+    category: "الدروع"
+    level: 4
+    price: 10400
+  fire_shield:
+    name: "Fire Shield"
+    category: "الدروع"
+    level: 4
+    price: 18710
+  flame_walker:
+    name: "Flame Walker"
+    category: "الدروع"
+    level: 2
+    price: 13460
+  hardened:
+    name: "Hardened"
+    category: "الدروع"
+    level: 2
+    price: 5100
+  ice_shield:
+    name: "Ice Shield"
+    category: "الدروع"
+    level: 3
+    price: 7050
+  jumping:
+    name: "Jumping"
+    category: "الدروع"
+    level: 2
+    price: 7340
+  kamikadze:
+    name: "Kamikadze"
+    category: "الدروع"
+    level: 3
+    price: 8810
+  lightweight:
+    name: "Lightweight"
+    category: "الدروع"
+    level: 1
+    price: 1600
+  night_vision:
+    name: "Night Vision"
+    category: "الدروع"
+    level: 1
+    price: 4400
+  rebound:
+    name: "Rebound"
+    category: "الدروع"
+    level: 1
+    price: 3600
+  regrowth:
+    name: "Regrowth"
+    category: "الدروع"
+    level: 4
+    price: 23390
+  saturation:
+    name: "Saturation"
+    category: "الدروع"
+    level: 2
+    price: 7340
+  speed:
+    name: "Speed"
+    category: "الدروع"
+    level: 2
+    price: 7340
+  stopping_force:
+    name: "Stopping Force"
+    category: "الدروع"
+    level: 3
+    price: 8810
+  water_breathing:
+    name: "Water Breathing"
+    category: "الدروع"
+    level: 1
+    price: 4400
+  bomber:
+    name: "Bomber"
+    category: "القوس"
+    level: 3
+    price: 29080
+  confusing_arrows:
+    name: "Confusing Arrows"
+    category: "القوس"
+    level: 3
+    price: 7050
+  darkness_arrows:
+    name: "Darkness Arrows"
+    category: "القوس"
+    level: 3
+    price: 7050
+  dragonfire_arrows:
+    name: "Dragonfire Arrows"
+    category: "القوس"
+    level: 3
+    price: 12690
+  electrified_arrows:
+    name: "Electrified Arrows"
+    category: "القوس"
+    level: 3
+    price: 8810
+  ender_bow:
+    name: "Ender Bow"
+    category: "القوس"
+    level: 1
+    price: 6600
+  explosive_arrows:
+    name: "Explosive Arrows"
+    category: "القوس"
+    level: 3
+    price: 8810
+  flare:
+    name: "Flare"
+    category: "القوس"
+    level: 1
+    price: 2500
+  ghast:
+    name: "Ghast"
+    category: "القوس"
+    level: 1
+    price: 6600
+  hover:
+    name: "Hover"
+    category: "القوس"
+    level: 3
+    price: 7050
+  lingering:
+    name: "Lingering"
+    category: "القوس"
+    level: 3
+    price: 12690
+  poisoned_arrows:
+    name: "Poisoned Arrows"
+    category: "القوس"
+    level: 3
+    price: 8810
+  sniper:
+    name: "Sniper"
+    category: "القوس"
+    level: 2
+    price: 4080
+  vampiric_arrows:
+    name: "Vampiric Arrows"
+    category: "القوس"
+    level: 3
+    price: 12690
+  withered_arrows:
+    name: "Withered Arrows"
+    category: "القوس"
+    level: 3
+    price: 8810
+  blast_mining:
+    name: "Blast Mining"
+    category: "الأدوات"
+    level: 5
+    price: 37940
+  glassbreaker:
+    name: "Glass Breaker"
+    category: "الأدوات"
+    level: 1
+    price: 1600
+  haste:
+    name: "Haste"
+    category: "الأدوات"
+    level: 3
+    price: 12690
+  lucky_miner:
+    name: "Lucky Miner"
+    category: "الأدوات"
+    level: 3
+    price: 8810
+  replanter:
+    name: "Replanter"
+    category: "الأدوات"
+    level: 1
+    price: 3520
+  silk_chest:
+    name: "Silk Chest"
+    category: "الأدوات"
+    level: 1
+    price: 5280
+  silk_spawner:
+    name: "Silk Spawner"
+    category: "الأدوات"
+    level: 1
+    price: 13200
+  smelter:
+    name: "Smelter"
+    category: "الأدوات"
+    level: 5
+    price: 21080
+  telekinesis:
+    name: "Telekinesis"
+    category: "الأدوات"
+    level: 1
+    price: 6600
+  treefeller:
+    name: "Treefeller"
+    category: "الأدوات"
+    level: 1
+    price: 4320
+  tunnel:
+    name: "Tunnel"
+    category: "الأدوات"
+    level: 3
+    price: 31020
+  veinminer:
+    name: "Veinminer"
+    category: "الأدوات"
+    level: 3
+    price: 25380
+  auto_reel:
+    name: "Auto Reel"
+    category: "الصيد"
+    level: 1
+    price: 5280
+  double_catch:
+    name: "Double Catch"
+    category: "الصيد"
+    level: 3
+    price: 12690
+  river_master:
+    name: "River Master"
+    category: "الصيد"
+    level: 5
+    price: 14050
+  seasoned_angler:
+    name: "Seasoned Angler"
+    category: "الصيد"
+    level: 3
+    price: 8810
+  survivalist:
+    name: "Survivalist"
+    category: "الصيد"
+    level: 1
+    price: 3600
+  bane_of_netherspawn:
+    name: "Bane of Netherspawn"
+    category: "الأسلحة"
+    level: 5
+    price: 14050
+  blindness:
+    name: "Blindness"
+    category: "الأسلحة"
+    level: 2
+    price: 4080
+  confusion:
+    name: "Confusion"
+    category: "الأسلحة"
+    level: 2
+    price: 4080
+  cure:
+    name: "Cure"
+    category: "الأسلحة"
+    level: 3
+    price: 7050
+  cutter:
+    name: "Cutter"
+    category: "الأسلحة"
+    level: 3
+    price: 12690
+  decapitator:
+    name: "Decapitator"
+    category: "الأسلحة"
+    level: 2
+    price: 9180
+  double_strike:
+    name: "Double Strike"
+    category: "الأسلحة"
+    level: 2
+    price: 13460
+  exhaust:
+    name: "Exhaust"
+    category: "الأسلحة"
+    level: 4
+    price: 10400
+  ice_aspect:
+    name: "Ice Aspect"
+    category: "الأسلحة"
+    level: 3
+    price: 7050
+  infernus:
+    name: "Infernus"
+    category: "الأسلحة"
+    level: 3
+    price: 7050
+  nimble:
+    name: "Nimble"
+    category: "الأسلحة"
+    level: 1
+    price: 3460
+  paralyze:
+    name: "Paralyze"
+    category: "الأسلحة"
+    level: 5
+    price: 17560
+  rage:
+    name: "Rage"
+    category: "الأسلحة"
+    level: 2
+    price: 5100
+  rocket:
+    name: "Rocket"
+    category: "الأسلحة"
+    level: 3
+    price: 11020
+  swiper:
+    name: "Swiper"
+    category: "الأسلحة"
+    level: 3
+    price: 12690
+  temper:
+    name: "Temper"
+    category: "الأسلحة"
+    level: 5
+    price: 30910
+  thrifty:
+    name: "Thrifty"
+    category: "الأسلحة"
+    level: 3
+    price: 15860
+  thunder:
+    name: "Thunder"
+    category: "الأسلحة"
+    level: 5
+    price: 21080
+  vampire:
+    name: "Vampire"
+    category: "الأسلحة"
+    level: 3
+    price: 15230
+  venom:
+    name: "Venom"
+    category: "الأسلحة"
+    level: 2
+    price: 4080
+  village_defender:
+    name: "Village Defender"
+    category: "الأسلحة"
+    level: 5
+    price: 14050
+  wisdom:
+    name: "Wisdom"
+    category: "الأسلحة"
+    level: 5
+    price: 17560
+  wither:
+    name: "Wither"
+    category: "الأسلحة"
+    level: 2
+    price: 5100
+  restore:
+    name: "Restore"
+    category: "عامة"
+    level: 3
+    price: 19040
+  soulbound:
+    name: "Soulbound"
+    category: "عامة"
+    level: 1
+    price: 9000
+  curse_of_breaking:
+    name: "Curse of Breaking"
+    category: "لعنات"
+    level: 3
+    price: 6000
+  curse_of_death:
+    name: "Curse of Death"
+    category: "لعنات"
+    level: 3
+    price: 6000
+  curse_of_drowned:
+    name: "Curse of Drowned"
+    category: "لعنات"
+    level: 3
+    price: 6000
+  curse_of_fragility:
+    name: "Curse of Fragility"
+    category: "لعنات"
+    level: 1
+    price: 2000
+  curse_of_mediocrity:
+    name: "Curse of Mediocrity"
+    category: "لعنات"
+    level: 3
+    price: 6000
+  curse_of_misfortune:
+    name: "Curse of Misfortune"
+    category: "لعنات"
+    level: 3
+    price: 6000

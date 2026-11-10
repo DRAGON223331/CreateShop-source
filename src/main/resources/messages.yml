@@ -18,6 +18,10 @@ help:
   - "&e/createshop browse &7- تصفح كل المحلات"
   - "&7&l&m----------&7&l[ &6&lمحلي &7&l]&m----------"
 
+es-empty: "%prefix% &cمتجر الكتب فاضي دلوقتي."
+es-confirm: "%prefix% &eعايز تشتري كتاب &f%book% &eبـ &6%price%&e؟ اضغط مرة تانية للتأكيد."
+es-bought: "%prefix% &aاشتريت كتاب &f%book% &aبـ &6%price%&a."
+
 limit-reached: "%prefix% &cوصلت للحد الأقصى (&e%max%&c غرض). شيل غرض الأول."
 blacklisted: "%prefix% &cالغرض ده ممنوع من العرض في المحلات."
 bad-slot: "%prefix% &cاختار غرض من شنطتك الأساسية (مش الدرع)."
@@ -50,6 +54,10 @@ bought: "%prefix% &aاشتريت &f%item% &7(x%amount%) &aمن &e%seller% &aبـ
 sold: "%prefix% &e%buyer% &aاشترى &f%item% &7(x%amount%) &aمن محلك واستلمت &6%payout%&a."
 
 gui:
+  es-title: "&8كتب التطوير - صفحة %page%/%pages%"
+  es-lore-price: "&7السعر: &6%price%"
+  es-lore-category: "&7القسم: &f%category%"
+  es-lore-buy: "&a&l| &aاضغط للشراء"
   title-manage: "&8محلي - &0%name%"
   title-view: "&8محل &0%name%"
   title-browse: "&8تصفح المحلات - صفحة %page%"

@@ -4,15 +4,22 @@ main: com.createshop.CreateShopPlugin
 api-version: '1.20'
 description: محل شخصي لكل لاعب - اعرض حاجتك بأسعارك، للبيع أو للعرض فقط
 depend: [Vault]
-softdepend: [EconomyShopGUI, QuickShop-Hikari, PlayerAuctions, Essentials]
+softdepend: [ExcellentEnchants, EconomyShopGUI, QuickShop-Hikari, PlayerAuctions, Essentials]
 
 commands:
   createshop:
     description: افتح محلك الشخصي
     usage: /createshop [visit <لاعب> | browse | help]
     aliases: [cshop, myshop]
+  enchantshop:
+    description: متجر كتب التطوير الخاصة (ExcellentEnchants)
+    usage: /enchantshop [صفحة]
+    aliases: [ebooks, enchantbooks]
 
 permissions:
+  createshop.enchantshop:
+    description: استخدام متجر كتب التطوير
+    default: true
   createshop.use:
     description: إنشاء وإدارة المحل الشخصي
     default: true
