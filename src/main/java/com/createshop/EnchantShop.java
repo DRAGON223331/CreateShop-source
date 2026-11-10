@@ -144,10 +144,10 @@ public final class EnchantShop implements Listener, CommandExecutor {
             ItemStack it = book(e);
             ItemMeta meta = it.getItemMeta();
             List<String> lore = meta.hasLore() && meta.getLore() != null ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
-            lore.add("");
-            lore.add(m().gui("gui.es-lore-price", "price", plugin.money(e.price())));
-            lore.add(m().gui("gui.es-lore-category", "category", e.category()));
-            lore.add(m().gui("gui.es-lore-buy"));
+            lore.addAll(m().list("gui.es-lore", "price", plugin.money(e.price()), "category", e.category()));
+            if (p.hasPermission("createshop.admin")) {
+                lore.add(m().gui("gui.es-lore-index", "category", e.category(), "index", "page" + (page + 1) + ".items." + (from + i + 1)));
+            }
             meta.setLore(lore);
             it.setItemMeta(meta);
             inv.setItem(i, it);

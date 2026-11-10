@@ -26,6 +26,13 @@ public final class Messages {
         InputStream in = plugin.getResource("messages.yml");
         if (in != null) {
             yml.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8)));
+            // يضيف أي مفاتيح جديدة ناقصة في ملف السيرفر القديم (من غير ما يمسح تعديلاتك)
+            yml.options().copyDefaults(true);
+            try {
+                yml.save(f);
+            } catch (java.io.IOException ex) {
+                plugin.getLogger().warning("تعذر حفظ messages.yml: " + ex.getMessage());
+            }
         }
     }
 
@@ -42,14 +49,16 @@ public final class Messages {
 
     /** رسالة شات (مع البادئة). */
     public String msg(String key, Object... kv) {
-        String s = yml.getString(key, key);
+        String s = yml.getString(key);
+        if (s == null) s = key;
         s = s.replace("%prefix%", yml.getString("prefix", ""));
         return color(apply(s, kv));
     }
 
     /** نص للواجهة (بدون بادئة). */
     public String gui(String key, Object... kv) {
-        return color(apply(yml.getString(key, key), kv));
+        String s = yml.getString(key);
+        return color(apply(s == null ? key : s, kv));
     }
 
     public List<String> list(String key, Object... kv) {
