@@ -216,7 +216,7 @@ public final class EnchantShop implements Listener, CommandExecutor {
             return;
         }
         double price = plugin.round2(e.price());
-        if (!eco.has(p, price)) {
+        if (!plugin.canAfford(p, price)) {
             p.sendMessage(m().msg("not-enough", "total", plugin.money(price)));
             return;
         }
@@ -225,7 +225,7 @@ public final class EnchantShop implements Listener, CommandExecutor {
             p.sendMessage(m().msg("inv-full-buy"));
             return;
         }
-        EconomyResponse r = eco.withdrawPlayer(p, price);
+        EconomyResponse r = plugin.charge(p, price);
         if (!r.transactionSuccess()) {
             p.sendMessage(m().msg("buy-failed", "reason", String.valueOf(r.errorMessage)));
             return;

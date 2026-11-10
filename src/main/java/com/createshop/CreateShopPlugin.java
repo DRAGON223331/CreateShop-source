@@ -1,7 +1,9 @@
 package com.createshop;
 
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -88,6 +90,33 @@ public final class CreateShopPlugin extends JavaPlugin {
             if (rsp != null) economy = rsp.getProvider();
         }
         return economy;
+    }
+
+
+    /** هل اللاعب معاه فلوس فعلاً؟ (رصيد حقيقي >= السعر، ومش دين). */
+    public boolean canAfford(OfflinePlayer p, double amount) {
+        Economy e = economy();
+        if (e == null || Double.isNaN(amount) || Double.isInfinite(amount) || amount <= 0) return false;
+        return e.getBalance(p) >= amount && e.has(p, amount);
+    }
+
+    /**
+     * يخصم الفلوس بأمان: يتأكد من الرصيد قبل وبعد الخصم، ولو الرصيد بقى بالسالب
+     * (بلجن اقتصاد بيسمح بالدين) يرجّع الفلوس ويلغي العملية. الإعداد: allow-debt.
+     */
+    public EconomyResponse charge(OfflinePlayer p, double amount) {
+        Economy e = economy();
+        double before = e.getBalance(p);
+        if (before < amount) {
+            return new EconomyResponse(0, before, EconomyResponse.ResponseType.FAILURE, "insufficient funds");
+        }
+        EconomyResponse r = e.withdrawPlayer(p, amount);
+        if (!r.transactionSuccess()) return r;
+        if (!getConfig().getBoolean("allow-debt", false) && e.getBalance(p) < 0) {
+            e.depositPlayer(p, amount);
+            return new EconomyResponse(0, before, EconomyResponse.ResponseType.FAILURE, "negative balance not allowed");
+        }
+        return r;
     }
 
     public Messages messages() { return messages; }

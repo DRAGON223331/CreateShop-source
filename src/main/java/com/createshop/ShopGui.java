@@ -427,7 +427,7 @@ public final class ShopGui implements Listener {
             return;
         }
         double total = plugin.round2(l.unitPrice * qty);
-        if (!eco.has(buyer, total)) {
+        if (!plugin.canAfford(buyer, total)) {
             buyer.sendMessage(m().msg("not-enough", "total", plugin.money(total)));
             return;
         }
@@ -438,7 +438,7 @@ public final class ShopGui implements Listener {
             return;
         }
 
-        EconomyResponse w = eco.withdrawPlayer(buyer, total);
+        EconomyResponse w = plugin.charge(buyer, total);
         if (!w.transactionSuccess()) {
             buyer.sendMessage(m().msg("buy-failed", "reason", String.valueOf(w.errorMessage)));
             return;

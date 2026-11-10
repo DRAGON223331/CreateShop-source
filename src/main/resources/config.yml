@@ -15,6 +15,9 @@ default-for-sale: true
 min-price: 0.01
 max-price: 1000000000
 
+# السماح بالشراء بالدين (رصيد سالب)؟ false = مفيش شراء من غير فلوس حقيقية
+allow-debt: false
+
 # تأكيد الشراء بضغطة تانية
 confirm-purchase: true
 confirm-timeout-seconds: 8
