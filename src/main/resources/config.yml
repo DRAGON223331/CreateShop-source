@@ -1,0 +1,67 @@
+# ═══════════════════════════════════════════════════════════
+#  CreateShop - محل شخصي لكل لاعب  (/createshop)
+#  مربوط بـ: Vault (الاقتصاد) | QuickShop-Hikari (حدود الأسعار)
+#            EconomyShopGUI (أسعار السيرفر المرجعية) | PlayerAuctions (نفس الستايل العربي)
+# ═══════════════════════════════════════════════════════════
+
+# أقصى عدد غرض يعرضه اللاعب في محله (الحد الأقصى المطلق 45).
+# تقدر تدي رتب أكتر بصلاحية:  createshop.limit.<رقم>   مثال: createshop.limit.36
+max-listings: 27
+
+# لما اللاعب يضيف غرض: يتعرض "قابل للبيع" ولا "للعرض فقط"؟
+default-for-sale: true
+
+# حدود السعر العامة (للقطعة الواحدة)
+min-price: 0.01
+max-price: 1000000000
+
+# تأكيد الشراء بضغطة تانية
+confirm-purchase: true
+confirm-timeout-seconds: 8
+
+# السماح بشراء قطعة واحدة بالكليك اليمين (الكليك الشمال = شراء الغرض كله)
+allow-single-unit-purchase: true
+
+# نسبة ضريبة على كل عملية بيع (بتتخصم من البائع). 0 = بدون ضريبة
+sale-tax-percent: 0.0
+
+# شكل الأرقام (نفس تنسيق EconomyShopGUI)
+currency-symbol: "$"
+currency-format: "#,##0.00"
+
+# أقصى طول لاسم المحل
+shop-name-max-length: 24
+
+# مدة انتظار كتابة السعر/الاسم في الشات (بالثواني)
+prompt-timeout-seconds: 60
+
+# تسجيل المبيعات في الكونسول
+log-sales: true
+
+# خامات ممنوعة من العرض
+blacklist:
+  - BEDROCK
+  - BARRIER
+  - COMMAND_BLOCK
+  - CHAIN_COMMAND_BLOCK
+  - REPEATING_COMMAND_BLOCK
+  - STRUCTURE_BLOCK
+  - JIGSAW
+  - DEBUG_STICK
+  - KNOWLEDGE_BOOK
+  - LIGHT
+  - SPAWNER
+
+# ───────────── الربط مع باقي البلاجنز ─────────────
+integrations:
+  # حدود الأسعار من QuickShop-Hikari (price-restriction.yml)
+  # الغرض "قابل للبيع" لازم سعره جوه الحد المسموح لخامته.
+  # الغرض "للعرض فقط" مفيش عليه أي قيود سعر (مهما كان سعره).
+  quickshop:
+    enabled: true
+    folder: "QuickShop-Hikari"
+  # أسعار السيرفر المرجعية من EconomyShopGUI (بتظهر في وصف الغرض)
+  economyshopgui:
+    enabled: true
+    show-server-prices: true
+    folder: "EconomyShopGUI"

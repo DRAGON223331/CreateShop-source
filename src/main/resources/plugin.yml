@@ -1,0 +1,24 @@
+name: CreateShop
+version: ${project.version}
+main: com.createshop.CreateShopPlugin
+api-version: '1.20'
+description: محل شخصي لكل لاعب - اعرض حاجتك بأسعارك، للبيع أو للعرض فقط
+depend: [Vault]
+softdepend: [EconomyShopGUI, QuickShop-Hikari, PlayerAuctions, Essentials]
+
+commands:
+  createshop:
+    description: افتح محلك الشخصي
+    usage: /createshop [visit <لاعب> | browse | help]
+    aliases: [cshop, myshop]
+
+permissions:
+  createshop.use:
+    description: إنشاء وإدارة المحل الشخصي
+    default: true
+  createshop.visit:
+    description: زيارة محلات اللاعبين والشراء منها
+    default: true
+  createshop.admin:
+    description: أوامر الإدارة (reload)
+    default: op
